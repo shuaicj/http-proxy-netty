@@ -1,0 +1,9 @@
+proxy.port: 8080
+
+logging.config: classpath:config/logback.xml
+
+---
+
+spring.profiles: prod
+
+logging.file: http-proxy-netty.log
