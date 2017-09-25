@@ -1,6 +1,7 @@
 package shuaicj.hobby.http.proxy.netty;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.apache.http.HttpHost;
 import org.apache.http.client.fluent.Request;
 import org.junit.Test;
@@ -16,7 +17,6 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@Slf4j
 public class HttpProxyTest {
 
     @Value("${proxy.port}")
@@ -24,19 +24,21 @@ public class HttpProxyTest {
 
     @Test
     public void http() throws Exception {
-        request("http://www.baidu.com");
+        assertThat(statusCodeOfRequest("http://www.baidu.com")).isEqualTo(200);
     }
 
     @Test
     public void https() throws Exception {
-        request("https://github.com");
+        assertThat(statusCodeOfRequest("https://github.com")).isEqualTo(200);
     }
 
-    private void request(String url) throws Exception {
-        logger.info("check this: {}",
-                Request.Get(url)
-                        .viaProxy(new HttpHost("127.0.0.1", port))
-                        .execute()
-                        .returnContent());
+    private int statusCodeOfRequest(String url) throws Exception {
+        return Request.Get(url)
+                .viaProxy(new HttpHost("127.0.0.1", port))
+                .execute()
+                .returnResponse()
+                .getStatusLine()
+                .getStatusCode();
     }
 }
+

@@ -2,8 +2,6 @@ package shuaicj.hobby.http.proxy.netty;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
 
 /**
  * The channel initializer.
@@ -17,7 +15,7 @@ public class HttpProxyChannelInitializer extends ChannelInitializer<SocketChanne
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         ch.pipeline().addLast(
-                new LoggingHandler(LogLevel.INFO),
+                // new LoggingHandler(LogLevel.INFO),
                 new HttpProxyClientHandler("task-" + taskCount++)
         );
     }
