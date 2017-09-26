@@ -23,7 +23,7 @@ public class HttpProxyClientHeader {
     private final StringBuilder lineBuf = new StringBuilder();
 
     public void digest(ByteBuf in) {
-        while (in.readableBytes() > 0) {
+        while (in.isReadable()) {
             if (complete) {
                 throw new IllegalStateException("already complete");
             }
@@ -58,7 +58,7 @@ public class HttpProxyClientHeader {
     }
 
     private String readLine(ByteBuf in) {
-        while (in.readableBytes() > 0) {
+        while (in.isReadable()) {
             byte b = in.readByte();
             byteBuf.writeByte(b);
             lineBuf.append((char) b);
