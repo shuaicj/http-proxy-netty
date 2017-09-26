@@ -6,12 +6,16 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * Handle data from remote.
  *
  * @author shuaicj 2017/09/21
  */
+@Component
+@Scope("prototype")
 @Slf4j
 public class HttpProxyRemoteHandler extends ChannelInboundHandlerAdapter {
 

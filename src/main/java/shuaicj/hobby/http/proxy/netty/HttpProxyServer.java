@@ -3,11 +3,16 @@ package shuaicj.hobby.http.proxy.netty;
 import javax.annotation.PostConstruct;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,11 +24,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class HttpProxyServer {
 
-    private final int port;
-
-    public HttpProxyServer(@Value("${proxy.port}") int port) {
-        this.port = port;
-    }
+    @Value("${proxy.port}") private int port;
+    @Autowired private ChannelInitializer<SocketChannel> channelInitializer;
+    @Autowired private ApplicationContext appCtx;
 
     @PostConstruct
     public void start() {
@@ -35,8 +38,8 @@ public class HttpProxyServer {
                 ServerBootstrap b = new ServerBootstrap();
                 b.group(bossGroup, workerGroup)
                         .channel(NioServerSocketChannel.class)
-                        // .handler(new LoggingHandler(LogLevel.INFO))
-                        .childHandler(new HttpProxyChannelInitializer())
+                        .handler(appCtx.getBean(LoggingHandler.class))
+                        .childHandler(channelInitializer)
                         .bind(port).sync().channel().closeFuture().sync();
             } catch (InterruptedException e) {
                 logger.error("shit happens", e);

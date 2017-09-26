@@ -9,12 +9,18 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * Handle data from client.
  *
  * @author shuaicj 2017/09/21
  */
+@Component
+@Scope("prototype")
 @Slf4j
 public class HttpProxyClientHandler extends ChannelInboundHandlerAdapter {
 
@@ -22,7 +28,8 @@ public class HttpProxyClientHandler extends ChannelInboundHandlerAdapter {
     private Channel clientChannel;
     private Channel remoteChannel;
 
-    private final HttpProxyClientHeader header = new HttpProxyClientHeader();
+    @Autowired private HttpProxyClientHeader header;
+    @Autowired private ApplicationContext appCtx;
 
     public HttpProxyClientHandler(String id) {
         this.id = id;
@@ -58,7 +65,7 @@ public class HttpProxyClientHandler extends ChannelInboundHandlerAdapter {
         Bootstrap b = new Bootstrap();
         b.group(clientChannel.eventLoop()) // use the same EventLoop
                 .channel(clientChannel.getClass())
-                .handler(new HttpProxyRemoteHandler(id, clientChannel));
+                .handler(appCtx.getBean(HttpProxyRemoteHandler.class, id, clientChannel));
         ChannelFuture f = b.connect(header.getHost(), header.getPort());
         remoteChannel = f.channel();
 

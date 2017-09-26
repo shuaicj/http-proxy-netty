@@ -4,12 +4,16 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * The http header of client.
  *
  * @author shuaicj 2017/09/21
  */
+@Component
+@Scope("prototype")
 @ToString(of = {"method", "host", "port", "https"})
 public class HttpProxyClientHeader {
 
