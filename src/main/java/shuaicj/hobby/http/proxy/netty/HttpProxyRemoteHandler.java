@@ -34,7 +34,7 @@ public class HttpProxyRemoteHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(final ChannelHandlerContext ctx, Object msg) {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         clientChannel.writeAndFlush(msg); // just forward
     }
 

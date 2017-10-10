@@ -41,7 +41,7 @@ public class HttpProxyClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(final ChannelHandlerContext ctx, Object msg) {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if (header.isComplete()) {
             remoteChannel.writeAndFlush(msg); // just forward
             return;
