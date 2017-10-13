@@ -1,9 +1,11 @@
 proxy.port: 8080
 
 logging.config: classpath:config/logback.xml
+logging.level.io.netty.handler.logging.LoggingHandler: DEBUG
 
 ---
 
 spring.profiles: prod
 
 logging.file: http-proxy-netty.log
+logging.level.io.netty.handler.logging.LoggingHandler: INFO
